@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: platform-apps
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/toluomoseyin/Enterprise-Platform-Configuration.git
+        revision: main
+        directories:
+          - path: environments/*/apps/*
+  template:
+    metadata:
+      name: '{{path.basename}}-{{path[1]}}'   # e.g., weather-api-dev
+    spec:
+      project: '{{path[1]}}'
+      source:
+        repoURL: https://github.com/toluomoseyin/Enterprise-Platform-Configuration.git
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

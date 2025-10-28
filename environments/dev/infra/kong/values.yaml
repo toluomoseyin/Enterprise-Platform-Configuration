@@ -1,0 +1,26 @@
+replicaCount: 2
+
+image:
+  repository: kong/kong-gateway
+  tag: "3.7"
+
+env:
+  database: "off"
+  nginx_worker_processes: "2"
+  log_level: "info"
+
+proxy:
+  type: NodePort
+  http:
+    enabled: true
+    servicePort: 80
+  tls:
+    enabled: false
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi

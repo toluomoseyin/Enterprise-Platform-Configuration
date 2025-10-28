@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: prod
+  namespace: argocd
+spec:
+  description: Production environment project
+  sourceRepos:
+    - 'https://github.com/your-org/platform-config.git'
+    - 'https://github.com/your-org/helm-charts.git'
+  destinations:
+    - namespace: '*'
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  roles:
+    - name: prod-admin
+      description: Restricted admin for production apps
+      policies:
+        - p, proj:prod:prod-admin, applications, sync, prod/*, allow
+        - p, proj:prod:prod-admin, applications, get, prod/*, allow
+      groups:
+        - prod-admins

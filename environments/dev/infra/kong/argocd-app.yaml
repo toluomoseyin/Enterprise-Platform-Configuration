@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kong-dev
+  namespace: argocd
+spec:
+  project: dev
+  source:
+    repoURL: https://charts.konghq.com
+    chart: kong
+    targetRevision: 2.37.1
+    helm:
+      valueFiles:
+        - environments/dev/infra/kong/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kong
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: dev
+  namespace: argocd
+spec:
+  description: Development environment project
+  sourceRepos:
+    - 'https://github.com/your-org/*'       # Allow all your repos (platform-config, helm, apps)
+  destinations:
+    - namespace: '*'
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  roles:
+    - name: dev-developer
+      description: Developers with full control in dev
+      policies:
+        - p, proj:dev:dev-developer, applications, sync, dev/*, allow
+        - p, proj:dev:dev-developer, applications, get, dev/*, allow
+      groups:
+        - dev-team

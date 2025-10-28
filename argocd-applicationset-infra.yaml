@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: platform-infra
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/your-org/platform-config.git
+        revision: main
+        directories:
+          - path: environments/*/infra/*
+  template:
+    metadata:
+      name: '{{path.basename}}-{{path[1]}}'   # e.g., kong-dev or kafka-prod
+    spec:
+      project: '{{path[1]}}'                  # environment = dev/staging/prod
+      source:
+        repoURL: https://github.com/your-org/platform-config.git
+        targetRevision: main
+        path: '{{path}}'                      # e.g., environments/dev/infra/kong
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

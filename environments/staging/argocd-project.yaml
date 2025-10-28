@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: staging
+  namespace: argocd
+spec:
+  description: Staging environment project
+  sourceRepos:
+    - 'https://github.com/your-org/*'
+  destinations:
+    - namespace: '*'
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  roles:
+    - name: staging-ops
+      description: Operations team for staging
+      policies:
+        - p, proj:staging:staging-ops, applications, sync, staging/*, allow
+        - p, proj:staging:staging-ops, applications, get, staging/*, allow
+      groups:
+        - staging-ops-team
