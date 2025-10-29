@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: apps
+  namespace: argocd
+spec:
+  description: "Application microservices (users, payments, notifications, etc.)"
+  sourceRepos:
+    - "https://github.com/toluomoseyin/Enterprise-Platform-Configuration.git"
+  destinations:
+    - namespace: "*"
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  roles:
+    - name: app-devs
+      description: Allow app developers to manage apps
+      policies:
+        - p, proj:apps:app-devs, applications, *, apps/*, allow
+      groups:
+        - app-developers

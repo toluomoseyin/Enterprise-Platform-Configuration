@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: infra
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/<your-org>/enterprise-platform-configuration.git
+        revision: main
+        directories:
+          - path: environments/dev/infra/*
+  template:
+    metadata:
+      name: '{{path.basename}}'
+    spec:
+      project: infra
+      source:
+        repoURL: https://github.com/<your-org>/enterprise-platform-configuration.git
+        targetRevision: main
+        path: '{{path}}'
+        plugin:
+          name: kustomize
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

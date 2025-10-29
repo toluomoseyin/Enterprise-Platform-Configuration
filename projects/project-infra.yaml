@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: infra
+  namespace: argocd
+spec:
+  description: "Infrastructure applications (Kong, Kafka, Kuma, etc.)"
+  sourceRepos:
+    - "https://github.com/toluomoseyin/Enterprise-Platform-Configuration.git"
+  destinations:
+    - namespace: "*"
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  roles:
+    - name: infra-admin
+      description: Full access to infra apps
+      policies:
+        - p, proj:infra:infra-admin, applications, *, infra/*, allow
+      groups:
+        - infra-admins

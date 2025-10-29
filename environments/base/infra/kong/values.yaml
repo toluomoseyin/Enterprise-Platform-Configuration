@@ -1,0 +1,37 @@
+env:
+  database: "off"
+  plugins: bundled,oidc
+
+image:
+  repository: revomatico/docker-kong-oidc
+  tag: 3.4.0-2
+
+ingressController:
+  enabled: false
+
+proxy:
+  type: NodePort
+  http:
+    enabled: true
+    servicePort: 80
+    nodePort: 30090
+  tls:
+    enabled: false
+
+admin:
+  enabled: true
+  type: NodePort
+  http:
+    enabled: true
+    servicePort: 8001
+    nodePort: 30091
+
+manager:
+  enabled: false
+  type: ClusterIP
+
+dblessConfig:
+  configMap: kong-config
+
+nodeSelector:
+  role: app

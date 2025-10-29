@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: platform-apps
+  name: apps
   namespace: argocd
 spec:
   generators:
@@ -9,12 +9,12 @@ spec:
         repoURL: https://github.com/toluomoseyin/Enterprise-Platform-Configuration.git
         revision: main
         directories:
-          - path: environments/*/apps/*
+          - path: environments/staging/apps/*
   template:
     metadata:
-      name: '{{path.basename}}-{{path[1]}}'   # e.g., weather-api-dev
+      name: '{{path.basename}}'
     spec:
-      project: '{{path[1]}}'
+      project: apps
       source:
         repoURL: https://github.com/toluomoseyin/Enterprise-Platform-Configuration.git
         targetRevision: main
@@ -26,5 +26,3 @@ spec:
         automated:
           prune: true
           selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
