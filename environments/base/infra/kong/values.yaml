@@ -29,6 +29,3 @@ admin:
 manager:
   enabled: false
   type: ClusterIP
-
-dblessConfig:
-  configMap: kong-config
