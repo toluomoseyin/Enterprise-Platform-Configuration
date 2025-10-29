@@ -3,3 +3,12 @@ kind: Kustomization
 
 resources:
   - ../../../base/infra/kong
+
+
+configMapGenerator:
+  - name: kong-config
+    files:
+      - kong.yml
+
+generatorOptions:
+  disableNameSuffixHash: true
