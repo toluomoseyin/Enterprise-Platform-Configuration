@@ -6,7 +6,7 @@ metadata:
 spec:
   generators:
     - git:
-        repoURL: https://github.com/<your-org>/enterprise-platform-configuration.git
+        repoURL: https://github.com/toluomoseyin/Enterprise-Platform-Configuration.git
         revision: main
         directories:
           - path: environments/dev/infra/*
@@ -16,11 +16,9 @@ spec:
     spec:
       project: infra
       source:
-        repoURL: https://github.com/<your-org>/enterprise-platform-configuration.git
+        repoURL: https://github.com/toluomoseyin/Enterprise-Platform-Configuration.git
         targetRevision: main
         path: '{{path}}'
-        plugin:
-          name: kustomize
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{path.basename}}'
@@ -28,3 +26,5 @@ spec:
         automated:
           prune: true
           selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
