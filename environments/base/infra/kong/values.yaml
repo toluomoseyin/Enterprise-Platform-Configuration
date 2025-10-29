@@ -32,6 +32,3 @@ manager:
 
 dblessConfig:
   configMap: kong-config
-
-nodeSelector:
-  role: app
